@@ -5,11 +5,12 @@ import java.awt.HeadlessException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class FalconChatFrame extends JFrame {
 
-	private JPanel myPanel;
+	private JTextArea myPanel;
 	private JTextField myTextField;
 	
 	public FalconChatFrame() {
@@ -24,7 +25,7 @@ public class FalconChatFrame extends JFrame {
 	private void setupLayout()
 	{
 		getContentPane().setLayout(new BorderLayout());
-		myPanel = new JPanel();
+		myPanel = new JTextArea();
 		myTextField = new JTextField();
 		JScrollPane sp = new JScrollPane();
 		sp.add(myPanel);

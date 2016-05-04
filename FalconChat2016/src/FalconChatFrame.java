@@ -66,7 +66,8 @@ public class FalconChatFrame extends JFrame implements ActionListener {
 	{
 		if (ae.getSource() == myTextField)
 		{
-			System.out.println(myTextField.getText());
+//			System.out.println(myTextField.getText());
+			myConnection.sendChatString(myTextField.getText());
 			myTextField.setText("");
 			
 		}

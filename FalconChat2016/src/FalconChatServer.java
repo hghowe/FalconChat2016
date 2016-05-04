@@ -22,6 +22,7 @@ public class FalconChatServer extends TimerTask
 	
 	public FalconChatServer() {
 		super();
+		System.out.println("Initializing.");
 		nextAvailableID = 0;
 		Timer t = new Timer();
 		t.scheduleAtFixedRate(this, 0, 20);  // this is the TimerTask class whose run()
@@ -55,11 +56,11 @@ public class FalconChatServer extends TimerTask
 				//    to whom we can send messages.
 				Chatterer nextChatterer = new Chatterer(cr.getName(),nextAvailableID, pw); 
 				
-				// tell everybody about this new chatterer.
-				broadcast(0,new String[]{""+nextAvailableID, cr.getName()});
-				
 				// add the new chatterer to the list of all chatterers.
 				chatterers.put(nextAvailableID, nextChatterer);
+				
+				// tell everybody about this new chatterer.
+				broadcast(0,new String[]{""+nextAvailableID, cr.getName()});
 				
 				nextAvailableID++;
 			}
@@ -93,6 +94,7 @@ public class FalconChatServer extends TimerTask
 	 */
 	public void broadcast(int messageType, String[] params)
 	{
+		System.out.println("Num chatterers: "+chatterers.size());
 		String message = messageTypes[messageType];
 		for (String s: params)
 		{
@@ -116,7 +118,7 @@ public class FalconChatServer extends TimerTask
 		System.out.println("Received message: "+message+"From:" + chatterers.get(chattererID).getName());
 		
 		// In this program, the clients only ever send one type of message - a piece of text they want everybody to read.
-		if (message.equals(messageTypes[1]))
+		if (messageComponents[0].equals(messageTypes[1]))
 		{
 			String outgoingMessage = "";
 			for (int i=1; i<messageComponents.length; i++)
@@ -135,8 +137,11 @@ public class FalconChatServer extends TimerTask
 	 */
 	public void disconnectClient(int whichID)
 	{
-		chatterers.remove(whichID);
+		System.out.println("Disconnecting "+whichID);
+		System.out.println("Keys: "+chatterers.keySet());
 		broadcast(2, new String[] {chatterers.get(whichID).getName()});  // 2 is the code number for "LEAVING"
+		chatterers.remove(whichID);
+		
 	}
 	
 	/**

@@ -15,7 +15,7 @@ public class FalconChatClient {
 	private Socket mySocket;
 	private Scanner mySocketScanner;
 	private PrintWriter mySocketWriter;
-	private final String IP_ADDRESS = "172.16.89.200"; // change this!!!
+	private final String IP_ADDRESS = "172.16.220.122"; // change this!!!
 	public FalconChatClient(String name, FalconChatFrame frame) 
 	{
 		myName = name;

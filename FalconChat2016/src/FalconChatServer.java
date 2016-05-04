@@ -12,11 +12,14 @@ import java.util.TimerTask;
 
 public class FalconChatServer extends TimerTask
 {
-	private int nextAvailableID;
-	private ServerSocket mySocket;
-	private Map<Integer, Chatterer> chatterers;
-	private Map<Integer, String> clientNames;
-	private final String[] messageTypes = {"NEW","MESSAGE","LEAVING"};
+	private int nextAvailableID; // each chatterer/client will be assigned an id number. 
+								// This is the number to be assigned next.
+	
+	private ServerSocket mySocket; // this server's connection to the outside world.
+	private Map<Integer, Chatterer> chatterers; // the various people who will be sending and receiving "chits."
+	
+	public final String[] messageTypes = {"NEW_CHATTERER","MESSAGE","CHATTERER_LEAVING"}; // String constants that represent the types of messages that may be sent back and forth.
+	
 	public FalconChatServer() {
 		super();
 		nextAvailableID = 0;
@@ -28,7 +31,9 @@ public class FalconChatServer extends TimerTask
 		chatterers = new HashMap<Integer, Chatterer>();
 		setupNetworking();
 	}
-	
+	/**
+	 * listens for clients that would like to join this chat, and sets them up when it finds them.
+	 */
 	public void setupNetworking()
 	{
 		try
@@ -64,7 +69,11 @@ public class FalconChatServer extends TimerTask
             e.printStackTrace();
         }	
 	}
-	
+
+	/**
+	 * implementation of TimerTask's abstract run() method... this method will be called
+	 * over and over again on a regular basis.
+	 */
 	public void run()
 	{
 		// in this case, run does nothing. If this were a more interactive program, such as
@@ -72,21 +81,16 @@ public class FalconChatServer extends TimerTask
 		// and rules...
 		// I could have left it out of this program, but I think it is important to see it in action.
 		
-		// so the code below is just to make sure _something_ happens in this run method so that the
-		// cycle doesn't happen too fast....
-		
-		try
-		{
-			Thread.sleep(1); 
-		}
-		catch (InterruptedException ie)
-		{
-			System.out.println(ie);
-		}
+		; // do nothing.
 		
 		
 	}
 
+	/**
+	 * send the given message to every chatterer in the list.
+	 * @param messageType - which type of message to send
+	 * @param params - an array of strings to send, tab-delimited.
+	 */
 	public void broadcast(int messageType, String[] params)
 	{
 		String message = messageTypes[messageType];
@@ -101,25 +105,51 @@ public class FalconChatServer extends TimerTask
 		}
 	}
 	
+	/**
+	 * This server has just received a message from a client. Deal with it.
+	 * @param message
+	 * @param chattererID
+	 */
 	public void handleMessage(String message, int chattererID)
 	{
 		String[] messageComponents = message.split("\t");
 		System.out.println("Received message: "+message+"From:" + chatterers.get(chattererID).getName());
-		String outgoingMessage = "";
-		for (int i=1; i<messageComponents.length; i++)
-		{	outgoingMessage += messageComponents[i];
-			if (i < messageComponents.length-1)
-				outgoingMessage+= " ";
+		
+		// In this program, the clients only ever send one type of message - a piece of text they want everybody to read.
+		if (message.equals(messageTypes[1]))
+		{
+			String outgoingMessage = "";
+			for (int i=1; i<messageComponents.length; i++)
+			{	outgoingMessage += messageComponents[i];
+				if (i < messageComponents.length-1)
+					outgoingMessage+= " ";
+			}
+			broadcast(1, new String[] {chatterers.get(chattererID).getName(),outgoingMessage});
 		}
-		broadcast(1, new String[] {chatterers.get(chattererID).getName(),outgoingMessage});
 	}
-	
+
+	/**
+	 * A client needs to be removed from the list of chatterers, and we'll tell all the others
+	 * he/she has left.
+	 * @param whichID
+	 */
 	public void disconnectClient(int whichID)
 	{
 		chatterers.remove(whichID);
 		broadcast(2, new String[] {""+whichID});  // 2 is the code number for "LEAVING"
 	}
 	
+	/**
+	 * This is an "interior class." It is just like a normal class, except, only FalconChatServer
+	 * knows about this class, and it has access to all the variables in the FalconChatServer
+	 * instance that created the instance of this class.
+	 * 
+	 * In this case, ClientReader maintains a thread - a separate, simultaneous process - that
+	 * constantly listens to the client to see whether a new message has come in and passes any
+	 * that it receives up to FalconChatServer's handleMessage().
+	 * @author harlan.howe
+	 *
+	 */
 	private class ClientReader implements Runnable
 	{
 		private Socket mySocket;
@@ -137,10 +167,15 @@ public class FalconChatServer extends TimerTask
 			{
 				myScanner = new Scanner(mySocket.getInputStream());
 				myName = myScanner.nextLine(); // assumes the first thing sent by a new client is its name...
+				
 				myID = nextAvailableID; // (from the outer class, which we have access to.)
-				myPrintWriter.println(myID);
-				myPrintWriter.flush();
-				new Thread(this).start();
+				
+				myPrintWriter.println(myID); // send back the ID we assigned it. 
+											// (A bit silly for this chat program, but might be handy later.)
+				
+				myPrintWriter.flush(); // actually sends the message.
+				
+				new Thread(this).start(); // begin running the thread - it looks for a run() method in this class.
 			}
 			catch (IOException e)
 			{
@@ -150,16 +185,20 @@ public class FalconChatServer extends TimerTask
 		public String getName() { return myName; }
 	
 		@Override
+		/**
+		 * our implementation of Runnable's abstract run() method. This keeps checking for
+		 * messages from this client's socket, via the scanner.
+		 */
 		public void run()
 		{
 			try
 			{
 				while(true)
 				{
-					handleMessage(myScanner.nextLine(), myID);
+					handleMessage(myScanner.nextLine(), myID); // wait for a message, and deal with it.
 				}
 			}
-			catch(NoSuchElementException nse)
+			catch(NoSuchElementException nse) // this client has dropped his/her connection.
 			{
 				disconnectClient(myID);
 			}

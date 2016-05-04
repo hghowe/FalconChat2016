@@ -8,7 +8,6 @@ public class FalconChatServerRunner {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		FalconChatServer theApp = new FalconChatServer();
-		theApp.run();
 	}
 
 }

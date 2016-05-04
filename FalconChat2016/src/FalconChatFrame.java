@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.GraphicsConfiguration;
+import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,8 +30,8 @@ public class FalconChatFrame extends JFrame implements ActionListener {
 		getContentPane().setLayout(new BorderLayout());
 		myPanel = new JTextArea();
 		myTextField = new JTextField();
-		JScrollPane sp = new JScrollPane();
-		sp.add(myPanel);
+		JScrollPane sp = new JScrollPane(myPanel);
+
 		getContentPane().add(sp, BorderLayout.CENTER);
 		getContentPane().add(myTextField, BorderLayout.SOUTH);
 		myTextField.addActionListener(this);
@@ -42,7 +43,9 @@ public class FalconChatFrame extends JFrame implements ActionListener {
 		if (ae.getSource() == myTextField)
 		{
 			System.out.println(myTextField.getText());
+//			myPanel.setText(myPanel.getText()+"\n"+myTextField.getText());
 			myTextField.setText("");
+			
 		}
 	}
 

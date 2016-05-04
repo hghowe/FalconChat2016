@@ -28,5 +28,8 @@ public class Chatterer {
 		myPrintWriter.flush();
 	}
 	
-
+	public String toString()
+	{
+		return myName+"\t"+myID;
+	}
 }

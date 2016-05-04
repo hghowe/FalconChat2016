@@ -7,8 +7,6 @@ public class FalconChatRunner {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println("Hello, world.");
-		System.out.println("Save the Welsh!");
 		FalconChatFrame theApp = new FalconChatFrame();
 	}
 

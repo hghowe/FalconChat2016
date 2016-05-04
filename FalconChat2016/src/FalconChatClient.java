@@ -27,6 +27,7 @@ public class FalconChatClient {
 	 */
 	public void setupConnection()
 	{
+		myFrame.displayMessage("Awaiting connection to server.");
 		try
 		{
 			mySocket = new Socket(IP_ADDRESS,5000); // communicating with the server via channel 5000.
@@ -38,10 +39,11 @@ public class FalconChatClient {
 			mySocketWriter.println(myName); // add my name to the things to send to the server
 			mySocketWriter.flush();         // ...and send it.
 			// Note: the server is expecting you to immediately send your name.
+			myFrame.displayMessage("Connected.");
 		}
 		catch (IOException e)
 		{
-			System.out.println("I couldn't connect.");
+			myFrame.displayMessage("I couldn't connect.");
 			e.printStackTrace();
 		}
 	}

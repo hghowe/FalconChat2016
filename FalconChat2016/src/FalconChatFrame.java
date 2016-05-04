@@ -23,9 +23,10 @@ public class FalconChatFrame extends JFrame implements ActionListener {
 		setSize(400,600);
 		setResizable(true);
 		setupLayout();
-		myConnection = new FalconChatClient(requestName(), this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+		myConnection = new FalconChatClient(requestName(), this);
+		
 	}
 	/**
 	 * sets up the GUI
@@ -40,6 +41,7 @@ public class FalconChatFrame extends JFrame implements ActionListener {
 		getContentPane().add(sp, BorderLayout.CENTER);
 		getContentPane().add(myTextField, BorderLayout.SOUTH);
 		myTextField.addActionListener(this);
+		myTextField.requestFocus();
 	}
 	
 	public void displayMessage(String message)

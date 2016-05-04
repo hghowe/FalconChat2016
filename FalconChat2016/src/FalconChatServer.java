@@ -58,17 +58,32 @@ public class FalconChatServer extends TimerTask
 				
 				nextAvailableID++;
 			}
-			catch (IOException e)
-	        {
-	            e.printStackTrace();
-	        }
 		}
-	
+		catch (IOException e) // in case there is a problem with the connection...
+        {
+            e.printStackTrace();
+        }	
 	}
 	
 	public void run()
 	{
-		;
+		// in this case, run does nothing. If this were a more interactive program, such as
+		// a game, this method would contain the game loop that handled all the motion, interactions
+		// and rules...
+		// I could have left it out of this program, but I think it is important to see it in action.
+		
+		// so the code below is just to make sure _something_ happens in this run method so that the
+		// cycle doesn't happen too fast....
+		
+		try
+		{
+			Thread.sleep(1); 
+		}
+		catch (InterruptedException ie)
+		{
+			System.out.println(ie);
+		}
+		
 		
 	}
 

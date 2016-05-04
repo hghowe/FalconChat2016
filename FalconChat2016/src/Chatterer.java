@@ -30,6 +30,6 @@ public class Chatterer {
 	
 	public String toString()
 	{
-		return myName+"\t"+myID;
+		return myID+": "+myName;
 	}
 }

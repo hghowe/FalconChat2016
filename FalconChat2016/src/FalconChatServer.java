@@ -18,7 +18,7 @@ public class FalconChatServer extends TimerTask
 	private ServerSocket mySocket; // this server's connection to the outside world.
 	private Map<Integer, Chatterer> chatterers; // the various people who will be sending and receiving "chits."
 	
-	public final String[] messageTypes = {"NEW_CHATTERER","MESSAGE","CHATTERER_LEAVING"}; // String constants that represent the types of messages that may be sent back and forth.
+	public static final String[] messageTypes = {"NEW_CHATTERER","MESSAGE","CHATTERER_LEAVING"}; // String constants that represent the types of messages that may be sent back and forth.
 	
 	public FalconChatServer() {
 		super();
@@ -136,7 +136,7 @@ public class FalconChatServer extends TimerTask
 	public void disconnectClient(int whichID)
 	{
 		chatterers.remove(whichID);
-		broadcast(2, new String[] {""+whichID});  // 2 is the code number for "LEAVING"
+		broadcast(2, new String[] {chatterers.get(whichID).getName()});  // 2 is the code number for "LEAVING"
 	}
 	
 	/**

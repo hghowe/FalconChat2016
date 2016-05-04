@@ -62,6 +62,18 @@ public class FalconChatClient {
 		else if (messageSequence[0].equals(FalconChatServer.messageTypes[2]))
 			myFrame.displayMessage(messageSequence[1]+" just left the conversation.");
 	}
+	/**
+	 * the user would like to send this "chit" string out to the server to rebroadcast!
+	 * @param chit
+	 */
+	public void sendChatString(String chit)
+	{
+		// add a code that this is a message to post and the actual message to the outgoing
+		// stream of info to the server.
+		mySocketWriter.println(FalconChatServer.messageTypes[1]+"\t"+chit);
+		// and send it:
+		mySocketWriter.flush();
+	}
 	
 	public class IncomingReader implements Runnable
 	{

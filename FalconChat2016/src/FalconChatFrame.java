@@ -20,6 +20,7 @@ public class FalconChatFrame extends JFrame implements ActionListener {
 	
 	public FalconChatFrame() {
 		super("Falcon Chat!");
+		System.out.println("I'm making a FalconChatFrame.");
 		setSize(400,600);
 		setResizable(true);
 		setupLayout();

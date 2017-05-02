@@ -45,7 +45,8 @@ public class FalconChatServer extends TimerTask
 				System.out.println("Waiting for Client");
 				// Wait for a connection request from a client. Don't advance to the next line until you do.
 				Socket clientSocket = mySocket.accept(); 
-				
+				System.out.println("Got one....");
+
 				// ask the socket for a writer that will allow us to send stuff to this client.
 				PrintWriter pw = new PrintWriter(clientSocket.getOutputStream());
 				

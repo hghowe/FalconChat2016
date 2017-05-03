@@ -30,7 +30,7 @@ public class FalconChatFrame extends JFrame implements ActionListener {
 		
 	}
 	/**
-	 * sets up the GUI
+	 * sets up the GUI - a multiline text area embedded in a scroll pane, and a text field below it.
 	 */
 	private void setupLayout()
 	{
@@ -45,6 +45,10 @@ public class FalconChatFrame extends JFrame implements ActionListener {
 		myTextField.requestFocus();
 	}
 	
+	/**
+	 * adds the given message to the text in the textview on a new line.
+	 * @param message
+	 */
 	public void displayMessage(String message)
 	{
 		myPanel.setText(myPanel.getText()+"\n"+message);
@@ -65,6 +69,9 @@ public class FalconChatFrame extends JFrame implements ActionListener {
 		return name;
 	}
 	
+	/**
+	 * respond to user pressing return while typing in the text field - sends off a message!
+	 */
 	public void actionPerformed(ActionEvent ae)
 	{
 		if (ae.getSource() == myTextField)

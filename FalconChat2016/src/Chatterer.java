@@ -10,7 +10,7 @@ public class Chatterer {
 
 	private String myName;
 	private int myID;
-	private PrintWriter myPrintWriter;
+	private PrintWriter myPrintWriter; // this will be how one sends messages to this client.
 	
 	public Chatterer(String name, int id, PrintWriter pw) 
 	{
